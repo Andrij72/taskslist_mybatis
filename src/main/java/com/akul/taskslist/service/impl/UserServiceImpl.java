@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
 
     @Override
-    public User getUserById(Long id) {
+    public User getById(Long id) {
         return null;
     }
 
