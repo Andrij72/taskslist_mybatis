@@ -17,7 +17,7 @@
     </parent>
 
     <properties>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
         <lombok.version>1.18.24</lombok.version>
         <postgres.version>42.6.0</postgres.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
