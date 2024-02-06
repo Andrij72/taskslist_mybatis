@@ -1,3 +1,9 @@
+security:
+  jwt:
+    secret: "d2V0cnl5dWlvb2piaG9vZmR2YmJibm15Zw=="
+    access: 3600000
+    refresh: 25920000000
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5433/taskslist?currentSchema=taskslist
@@ -7,13 +13,7 @@ spring:
 
   sql:
     init:
-      mode: always
+      mode: never
       continue-on-error: false
-     # data-locations: classpath:demo_data.sql
-
-security:
-    jwt:
-      secret: 'MzRAM1NERkdnZ2dnZyYqJV5eaFAwMDAwMCZeVEZGQ0VTUlhZVlVWVXZ5Y3Z5dGM='
-      access: 3600000
-      refresh: 2592000000
+      data-locations: classpath:demo_data2.sql
 

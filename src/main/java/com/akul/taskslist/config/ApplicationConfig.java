@@ -2,6 +2,8 @@ package com.akul.taskslist.config;
 
 import com.akul.taskslist.web.security.JwtTokenFilter;
 import com.akul.taskslist.web.security.JwtTokenProvider;
+import com.akul.taskslist.web.security.expression.CustomSecurityExceptionHandler;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -22,6 +24,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 @Configuration
 @EnableWebSecurity
@@ -29,7 +34,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class ApplicationConfig {
 
-    private final JwtTokenProvider jwtTokenProvider;
+
+    private final JwtTokenProvider tokenProvider;
     private final ApplicationContext applicationContext;
 
     @Bean
@@ -44,15 +50,73 @@ public class ApplicationConfig {
         return configuration.getAuthenticationManager();
     }
 
-    /*@Bean
+
+    @Bean
     public MethodSecurityExpressionHandler expressionHandler() {
         DefaultMethodSecurityExpressionHandler expressionHandler
                 = new CustomSecurityExceptionHandler();
         expressionHandler.setApplicationContext(applicationContext);
         return expressionHandler;
-    }*/
+    }
+
+
+    /***
+     *
+     */
+
 
     @Bean
+    public SecurityFilterChain filterChain(final HttpSecurity httpSecurity)
+            throws Exception {
+        httpSecurity
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .sessionManagement(sessionManagement ->
+                        sessionManagement
+                                .sessionCreationPolicy(
+                                        SessionCreationPolicy.STATELESS
+                                )
+                )
+                .exceptionHandling(configurer ->
+                        configurer.authenticationEntryPoint(
+                                        (request, response, exception) -> {
+                                            response.setStatus(
+                                                    HttpStatus.UNAUTHORIZED
+                                                            .value()
+                                            );
+                                            response.getWriter()
+                                                    .write("Unauthorized.");
+                                        })
+                                .accessDeniedHandler(
+                                        (request, response, exception) -> {
+                                            response.setStatus(
+                                                    HttpStatus.FORBIDDEN
+                                                            .value()
+                                            );
+                                            response.getWriter()
+                                                    .write("Unauthorized.");
+                                        }))
+                .authorizeHttpRequests(configurer ->
+                        configurer.requestMatchers("/api/v1/auth/**")
+                                .permitAll()
+                                .requestMatchers("/swagger-ui/**")
+                                .permitAll()
+                                .requestMatchers("/v3/api-docs/**")
+                                .permitAll()
+                                .requestMatchers("/graphiql")
+                                .permitAll()
+                                .anyRequest().authenticated())
+                .anonymous(AbstractHttpConfigurer::disable)
+                .addFilterBefore(new JwtTokenFilter(tokenProvider),
+                        UsernamePasswordAuthenticationFilter.class);
+
+        return httpSecurity.build();
+    }
+
+
+
+    /*@Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
@@ -93,5 +157,5 @@ public class ApplicationConfig {
                         UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
-
+*/
 }

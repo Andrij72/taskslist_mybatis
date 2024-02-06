@@ -4,8 +4,6 @@ import com.akul.taskslist.domain.user.User;
 
 public interface UserService {
 
-    User getUserById(Long id);
-
     User getByUsername(String username);
 
     boolean isTaskOwner(Long userId, Long taskId);
@@ -14,6 +12,7 @@ public interface UserService {
 
     User create(User user);
 
-    User delete(Long id);
+    void delete(Long id);
 
+    User getById(Long Id);
 }
