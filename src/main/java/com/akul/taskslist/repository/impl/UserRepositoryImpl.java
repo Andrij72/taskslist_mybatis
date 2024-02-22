@@ -37,7 +37,7 @@ public class UserRepositoryImpl implements UserRepository {
                    t.id              as task_id,
                    t.title           as task_title,
                    t.description     as task_description,
-                   t.expiration_date as task_expiration,
+                   t.expiration_date as task_expiration_date,
                    t.status          as task_status
             FROM taskslist.users u
                      JOIN taskslist.users_roles ur on u.id = ur.user_id
@@ -45,24 +45,23 @@ public class UserRepositoryImpl implements UserRepository {
                      JOIN taskslist.tasks t on t.id = ut.task_id
             WHERE u.id = ?""";
 
-    private final String FIND_BY_USER = """
-                                      
-                            SELECT u.id              as user_id,
-                                   u.name            as user_name,
-                                   u.username        as user_username,
-                                   u.password        as user_password,
-                                   ur.role           as user_role_role,
-                                   t.id              as task_id,
-                                   t.title           as task_title,
-                                   t.description     as task_description,
-                                   t.expiration_date as task_expiration,
-                                   t.status          as task_status
-                            FROM taskslist.users u
-                                 JOIN taskslist.users_roles ur on u.id = ur.user_id
-                                 JOIN taskslist.users_tasks ut on u.id = ut.user_id
-                                 JOIN taskslist.tasks t on t.id = ut.task_id
-                            WHERE u.username = ?
-            """;
+    private final String FIND_BY_USER = """                                      
+            SELECT u.id              as user_id,
+                   u.name            as user_name,
+                   u.username        as user_username,
+                   u.password        as user_password,
+                   ur.role           as user_role_role,
+                   t.id              as task_id,
+                   t.title           as task_title,
+                   t.description     as task_description,
+                   t.expiration_date as task_expiration_date,
+                   t.status          as task_status
+            FROM taskslist.users u
+            JOIN taskslist.users_roles ur on u.id = ur.user_id
+            JOIN taskslist.users_tasks ut on u.id = ut.user_id
+            JOIN taskslist.tasks t on t.id = ut.task_id
+            WHERE u.username = ?
+             """;
 
     private final String UPDATE = """
             UPDATE taskslist.users
@@ -96,11 +95,10 @@ public class UserRepositoryImpl implements UserRepository {
     public Optional<User> findUserById(Long id) {
         try {
             Connection connection = dataSourceConfig.getConnection();
-
-            PreparedStatement statement = connection.prepareStatement(FIND_BY_ID, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            PreparedStatement statement = connection.prepareStatement(FIND_BY_ID,
+                    ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             statement.setLong(1, id);
             try (ResultSet rs = statement.executeQuery()) {
-
                 return Optional.ofNullable(UserRowMapper.mapRow(rs));
             }
         } catch (SQLException e) {
@@ -113,24 +111,17 @@ public class UserRepositoryImpl implements UserRepository {
     public Optional<User> findUserByUsername(String usernameValue) {
         try {
             Connection connection = dataSourceConfig.getConnection();
-
             PreparedStatement statement = connection.prepareStatement(FIND_BY_USER,
                     ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             statement.setString(1, usernameValue);
-            List<User> userList = new ArrayList<>();
             try (ResultSet rs = statement.executeQuery()) {
-                while (rs.next()) {
-                    lg.info("USERNAME ist: {}", rs.getString("user_username"));
-                    userList.add(UserRowMapper.mapRow(rs));
-                }
+                return Optional.ofNullable(UserRowMapper.mapRow(rs));
             }
-
-            return userList.isEmpty() ? Optional.empty() : Optional.of(userList.get(0));
-
         } catch (SQLException e) {
-            throw new ResourceNotFoundException("Exception while finding user by username.", e);
+            throw new ResourceNotFoundException("Exception wile find user by username", e);
         }
     }
+
 
     @Override
     public void update(User user) {

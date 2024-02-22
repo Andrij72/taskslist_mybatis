@@ -50,7 +50,6 @@ public class ApplicationConfig {
         return configuration.getAuthenticationManager();
     }
 
-
     @Bean
     public MethodSecurityExpressionHandler expressionHandler() {
         DefaultMethodSecurityExpressionHandler expressionHandler
@@ -59,54 +58,30 @@ public class ApplicationConfig {
         return expressionHandler;
     }
 
-
-    /***
-     *
-     */
-
-
     @Bean
-    public SecurityFilterChain filterChain(final HttpSecurity httpSecurity)
-            throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-                .csrf(AbstractHttpConfigurer::disable)
-                .cors(AbstractHttpConfigurer::disable)
-                .httpBasic(AbstractHttpConfigurer::disable)
-                .sessionManagement(sessionManagement ->
-                        sessionManagement
-                                .sessionCreationPolicy(
-                                        SessionCreationPolicy.STATELESS
-                                )
-                )
-                .exceptionHandling(configurer ->
-                        configurer.authenticationEntryPoint(
-                                        (request, response, exception) -> {
-                                            response.setStatus(
-                                                    HttpStatus.UNAUTHORIZED
-                                                            .value()
-                                            );
-                                            response.getWriter()
-                                                    .write("Unauthorized.");
-                                        })
-                                .accessDeniedHandler(
-                                        (request, response, exception) -> {
-                                            response.setStatus(
-                                                    HttpStatus.FORBIDDEN
-                                                            .value()
-                                            );
-                                            response.getWriter()
-                                                    .write("Unauthorized.");
-                                        }))
-                .authorizeHttpRequests(configurer ->
-                        configurer.requestMatchers("/api/v1/auth/**")
-                                .permitAll()
-                                .requestMatchers("/swagger-ui/**")
-                                .permitAll()
-                                .requestMatchers("/v3/api-docs/**")
-                                .permitAll()
-                                .requestMatchers("/graphiql")
-                                .permitAll()
-                                .anyRequest().authenticated())
+                .csrf().disable()
+                .cors()
+                .and()
+                .httpBasic().disable()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint((request, response, exception) -> {
+                    response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                    response.getWriter().write("Unauthorized.");
+                })
+                .accessDeniedHandler((request, response, exception) -> {
+                    response.setStatus(HttpStatus.FORBIDDEN.value());
+                    response.getWriter().write("Unauthorized.");
+                })
+                .and()
+                .authorizeHttpRequests()
+                .requestMatchers("/api/v1/auth/**").permitAll()
+                .anyRequest().authenticated()
+                .and()
                 .anonymous(AbstractHttpConfigurer::disable)
                 .addFilterBefore(new JwtTokenFilter(tokenProvider),
                         UsernamePasswordAuthenticationFilter.class);

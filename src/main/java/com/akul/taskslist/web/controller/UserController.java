@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping
+@RequestMapping("/api/v1/users")
 @AllArgsConstructor
 @Validated
 public class UserController {
@@ -28,19 +28,19 @@ public class UserController {
     private final UserService userService;
     private final TaskService taskService;
 
-    @PutMapping
-
-    public UserDto update(@Validated(OnUpdate.class) @RequestBody UserDto dto) {
-        User user = userMapper.toEntity(dto);
-        User updUser = userService.update(user);
-        return userMapper.toDto(updUser);
-
-    }
 
     @GetMapping("/{id}")
     public UserDto getById(@PathVariable Long id) {
         User user = userService.getById(id);
         return userMapper.toDto(user);
+    }
+
+    @PutMapping("/{id}")
+    public UserDto update(@Validated(OnUpdate.class) @RequestBody UserDto dto) {
+        User user = userMapper.toEntity(dto);
+        User updUser = userService.update(user);
+        return userMapper.toDto(updUser);
+
     }
 
     @DeleteMapping("/{id}")
@@ -56,9 +56,9 @@ public class UserController {
 
     @PostMapping("/{id}/tasks")
     public TaskDto createTask(@PathVariable Long id,
-                                  @Validated(OnCreate.class) @RequestBody TaskDto dto) {
+                              @Validated(OnCreate.class) @RequestBody TaskDto dto) {
 
-        Task task= taskMapper.toEntity(dto);
+        Task task = taskMapper.toEntity(dto);
         Task createdTask = taskService.create(task, id);
         return taskMapper.toDto(createdTask);
 

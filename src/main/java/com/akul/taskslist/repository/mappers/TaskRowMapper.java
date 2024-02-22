@@ -19,8 +19,8 @@ public class TaskRowMapper {
             task.setId(resultSet.getLong("task_id"));
             task.setTitle(resultSet.getString("task_title"));
             task.setDescription(resultSet.getString("task_description"));
-            task.setStatus(Status.valueOf("task_Status"));
-            Timestamp timestamp = resultSet.getTimestamp("task_ExpirationDate");
+            task.setStatus(Status.valueOf(resultSet.getString("task_status")));
+            Timestamp timestamp = resultSet.getTimestamp("task_expiration_date");
             if (timestamp != null) {
                 task.setExpirationDate(timestamp.toLocalDateTime());
             }
@@ -31,17 +31,15 @@ public class TaskRowMapper {
 
     @SneakyThrows
     public static List<Task> mapRows(ResultSet resultSet) {
-
         List<Task> tasks = new ArrayList<>();
-
         while (resultSet.next()) {
             Task task = new Task();
             task.setId(resultSet.getLong("task_id"));
             if (!resultSet.wasNull()) {
                 task.setTitle(resultSet.getString("task_title"));
                 task.setDescription(resultSet.getString("task_description"));
-                task.setStatus(Status.valueOf("task_Status"));
-                Timestamp timestamp = resultSet.getTimestamp("task_ExpirationDate");
+                task.setStatus(Status.valueOf(resultSet.getString("task_status")));
+                Timestamp timestamp = resultSet.getTimestamp("task_expiration_date");
                 if (timestamp != null) {
                     task.setExpirationDate(timestamp.toLocalDateTime());
                 }
@@ -50,4 +48,5 @@ public class TaskRowMapper {
         }
         return tasks;
     }
+
 }
