@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
+//@Repository
 @RequiredArgsConstructor
 public class UserRepositoryImpl implements UserRepository {
 
@@ -141,7 +141,8 @@ public class UserRepositoryImpl implements UserRepository {
     public void create(User user) {
         try {
             Connection connection = dataSourceConfig.getConnection();
-            PreparedStatement statement = connection.prepareStatement(CREATE, PreparedStatement.RETURN_GENERATED_KEYS);
+            PreparedStatement statement = connection.prepareStatement(CREATE,
+                    PreparedStatement.RETURN_GENERATED_KEYS);
             statement.setString(1, user.getName());
             statement.setString(2, user.getUsername());
             statement.setString(3, user.getPassword());
@@ -174,7 +175,8 @@ public class UserRepositoryImpl implements UserRepository {
     public boolean isTaskOwner(Long userId, Long taskId) {
         try {
             Connection connection = dataSourceConfig.getConnection();
-            PreparedStatement statement = connection.prepareStatement(IS_TASK_OWNER, PreparedStatement.RETURN_GENERATED_KEYS);
+            PreparedStatement statement = connection.prepareStatement(IS_TASK_OWNER,
+                    PreparedStatement.RETURN_GENERATED_KEYS);
             statement.setLong(1, userId);
             statement.setLong(2, taskId);
 

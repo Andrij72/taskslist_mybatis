@@ -18,10 +18,8 @@ server:
 
 
       # data-locations: classpath:demo_data2.sql
-
-# mybatis:
-#   mapper-locations: classpath:mybatis/mapper/*.xml
-
+mybatis:
+  mapper-locations: classpath:mybatis/mapper/*.xml
 security:
   jwt:
     access: 3600000

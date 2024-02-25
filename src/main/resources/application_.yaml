@@ -17,8 +17,8 @@ spring:
 
 ###########################################
 
-#mybatis:
-  #mapper-locations: classpath:mybatis/mapper/*.xml
+mybatis:
+  mapper-locations: classpath:mybatis/mapper/*.xml
 
 security:
   jwt:
