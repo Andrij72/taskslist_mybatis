@@ -1,22 +1,19 @@
+insert into users(name, username, password)
+values ('John Silver', 'jnsilver@gmail.com', '$2a$10$auDg8kb2VcFrofzJf6HHZ.sSOQE9G5KrukRgxUbYX1lladT8ArlYS'),
+       ('Friderik Jakobs', 'fridjakobs@gmail.com', '$2a$12$7Nh4r8t2g71b.H.54qEEO.wPefEtjIBWF1Ji0Y.NcG.WUQa9I7U.W');
 
 
-insert into taskslist.users (name, username, password)
-values ('John Doe', 'johndoe@gmail.com', '$2a$10$GHTOeyLt.avNCzWQCZbbPeC587aAHF9mglDgVd5WC0BhrApG9bcf2'),
-       ('Mike Smith', 'mikesmith@yahoo.com', '$2a$10$0hnK.DOkTiI5kPXSIVO.IOEiIJfNMOVffgrapnEqTTOTD/xI2l/Vi');
-
-insert into taskslist.tasks (title, description, status, expiration_date)
-values ('Buy cheese', null, 'TODO', '2023-01-29 12:00:00'),
-       ('Do homework', 'Math, Physics, Literature', 'IN_PROGRESS', '2023-01-31 00:00:00'),
-       ('Clean rooms', null, 'DONE', null),
-       ('Call Mike', 'Ask about meeting', 'TODO', '2023-02-01 00:00:00');
-
-insert into taskslist.users_tasks (task_id, user_id)
+insert into tasks(title, description, status, expiration_date)
+values ('Buy Butter', null, 'TODO', '2023-06-14 15:23:42'),
+       ('Do homework', 'Mathematics, Physics', 'IN_PROGRESS', '2023-01-01 10:00:00'),
+       ('Clean room', null, 'DONE', null),
+       ('Call Nino', 'Ask him about next work', 'TODO', '2023-03-03 00:00:00');
+insert into users_tasks(task_id, user_id)
 values (1, 2),
        (2, 2),
        (3, 2),
        (4, 1);
-
-insert into taskslist.users_roles (user_id, role)
+insert into users_roles(user_id, role)
 values (1, 'ROLE_ADMIN'),
        (1, 'ROLE_USER'),
        (2, 'ROLE_USER');
