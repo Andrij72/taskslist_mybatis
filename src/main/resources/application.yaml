@@ -4,7 +4,12 @@ spring:
     username: postgres
     password: root
     driver-class-name: org.postgresql.Driver
-    
+
+  liquibase:
+    change-log: classpath:liquibase/db.changelog.yaml
+    enabled: true
+    default-schema: taskslist
+
 server:
   port: 8090
     # url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/taskslist?useSSL=false
@@ -15,9 +20,8 @@ server:
     init:
       mode: never
       continue-on-error: false
-
-
       # data-locations: classpath:demo_data2.sql
+
 mybatis:
   mapper-locations: classpath:mybatis/mapper/*.xml
 security:
@@ -25,3 +29,5 @@ security:
     access: 3600000
     refresh: 25920000000
     secret: cXdlcnR5ZmdodW9paWlpYmdBREZHZ2pic2tvdW9saGs=
+springdoc:
+  override-with-generic-response: false

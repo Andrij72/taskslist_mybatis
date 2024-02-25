@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-@Mapper
+
 public interface UserRepository {
 
     Optional<User> findUserById(Long id);
