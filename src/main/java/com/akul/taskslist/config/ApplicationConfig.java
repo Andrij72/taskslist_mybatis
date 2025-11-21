@@ -3,7 +3,6 @@ package com.akul.taskslist.config;
 import com.akul.taskslist.web.security.JwtTokenFilter;
 import com.akul.taskslist.web.security.JwtTokenProvider;
 import com.akul.taskslist.web.security.expression.CustomSecurityExceptionHandler;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -28,9 +27,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import java.util.HashMap;
-import java.util.Map;
 
 
 @Configuration
